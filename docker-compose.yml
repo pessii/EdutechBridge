@@ -1,0 +1,54 @@
+version: "3.9"
+
+services:
+  # php: サービス名（サービス名入れるとエラーが起きる）
+  # context: ビルドコンテキスト（buildを実行する場所）の設定
+  # dockerfile: buildするDockerfileまでのパス（docker-compose.ymlから見た相対パス）
+  # volumes: は バインドマウント を行っている
+  php: 
+    build:
+      context: .
+      dockerfile: ./docker/php/Dockerfile
+    volumes:
+      - ./ebridge/:/php
+
+  # ports: ホスト側のポート番号 : コンテナのポート番号
+  # コンテナ側はnginxのデフォルトのポート番号である 80 にしています。
+  # depends_on:  php → nginx の順に起動するように指定しています。
+  nginx:
+    build:
+      context: .
+      dockerfile: ./docker/nginx/Dockerfile
+    ports:
+      - 8080:80
+    volumes:
+      - ./ebridge/:/php
+    depends_on:
+      - php
+
+  # environment: 環境変数の設定
+    # ※プロジェクト管理では、環境変数は .env に書いて .gitignore にするなどして、重要な情報が公開されないようにする
+      # MYSQL_DATABASE：DB名
+      # MYSQL_USER：ユーザー名
+      # MYSQL_PASSWORD：パスワード
+      # MYSQL_ROOT_PASSWORD：ルート権限のパスワード
+      # TZ：時間設定（Time Zone）
+  # volumes:mysql-colume という名前で作成した名前付きボリュームとコンテナ内を紐づけ
+  mysql:
+    build:
+      context: .
+      dockerfile: ./docker/mysql/Dockerfile
+    ports:
+      - 23306:3306
+    environment:
+      MYSQL_DATABASE: ebridge
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: root
+      TZ: 'Asia/Tokyo'
+    volumes:
+      - mysql-volume:/var/lib/mysql
+
+# Volumesを使ってデータの永続化
+volumes:
+  mysql-volume:
