@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
+use App\Http\Controllers\Controller;
+use App\Models\Owner;
+use Carbon\Carbon;
 
 class OwnersController extends Controller
 {
@@ -24,7 +28,19 @@ class OwnersController extends Controller
      */
     public function index()
     {
-        dd(1);
+        $date_now = Carbon::now();
+        $date_parse = Carbon::parse(now());
+
+        $eAll = Owner::all();
+        $eFirst = Owner::first();
+
+        // dd($eAll, $eFirst, $date_now, $date_parse);
+
+        return view('admin.owners.index', 
+            compact(
+                'eAll',
+                'eFirst'
+            ));
     }
 
     /**
