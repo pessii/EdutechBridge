@@ -5,10 +5,15 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 use App\Http\Controllers\Controller;
 use App\Models\Owner;
+use App\Models\Shop;
+
 use Carbon\Carbon;
+
+use Throwable;
 
 class OwnersController extends Controller
 {
@@ -62,15 +67,34 @@ class OwnersController extends Controller
             'password' => 'required|string|confirmed|min:8',
         ]);
 
-        Owner::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        try
+        {
+            DB::transaction(function () use($request) {
+                $owner = Owner::create([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'password' => Hash::make($request->password),
+                ]);
 
-        return redirect()
-            ->route('admin.owners.index')
-            ->with('message', 'オーナー登録が完了されました');
+                Shop::create([
+                    'owner_id' => $owner->id,//作成したオーナーのIDを取得
+                    'name' => '店名を入力',
+                    'information' => '',
+                    'filename' => '',
+                    'is_selling' => true
+                ]);
+            //トランザクション２回繰り返し
+            }, 2);
+    
+            return redirect()
+                ->route('admin.owners.index')
+                ->with('message', 'オーナー登録が完了されました');
+        }
+        catch(\Throwable $e)
+        {
+            Log::error($e);
+            throw $e;
+        }
     }
 
     /**
