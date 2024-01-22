@@ -17,11 +17,6 @@ use Throwable;
 
 class OwnersController extends Controller
 {
-    /**
-     * 新しいUserControllerインスタンスの生成
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('auth:admin');
