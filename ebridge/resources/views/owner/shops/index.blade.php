@@ -9,6 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
+                    <x-flash-message status="info" />
 
                     @foreach($shops as $shop)
                     <div class="w-1/2 p-4">
@@ -22,13 +23,7 @@
                                     @endif
                                 </div>
                                 <div class="text-xl">{{ $shop->name }}</div>
-                                <div>
-                                    @if(empty($shop->filename))
-                                        <img src="{{ asset('images/no_image.jpg') }}">
-                                    @else
-                                        <img src="{{ asset('storage/shops/' . $shop->filename) }}">
-                                    @endif
-                                </div>
+                                <x-shop-thumbnail :filename="$shop->filename" />
                             </div>
                         </a>
                     </div>
