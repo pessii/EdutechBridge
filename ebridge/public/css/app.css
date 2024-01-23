@@ -909,6 +909,9 @@ select {
 .w-full {
   width: 100%;
 }
+.w-1\/4 {
+  width: 25%;
+}
 .max-w-6xl {
   max-width: 72rem;
 }

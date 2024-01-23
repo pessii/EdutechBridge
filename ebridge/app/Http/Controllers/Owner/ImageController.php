@@ -3,10 +3,34 @@
 namespace App\Http\Controllers\Owner;
 
 use App\Http\Controllers\Controller;
+use App\Models\Image;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ImageController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:owners');
+        //オーナーかの確認
+        $this->middleware(function($request, $next){
+            //imageのid取得 
+            $id = $request->route()->parameter('image');
+            if(!is_null($id)){
+                $imagesOwnerId = Image::findOrFail($id)->owner->id;
+                // キャスト 文字列→数値に型変換 
+                $imageId = (int)$imagesOwnerId;
+                // 同じでなかったら 
+                if($imageId !== Auth::id()){ 
+                    abort(404);
+                }
+            } 
+            return $next($request); 
+            });
+           
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +38,14 @@ class ImageController extends Controller
      */
     public function index()
     {
-        //
+        $images = Image::where('owner_id', Auth::id())
+            ->orderBy('updated_at', 'desc')
+            ->paginate(20);
+        
+        return view('owner.images.index',
+            compact(
+                'images'
+            ));
     }
 
     /**
