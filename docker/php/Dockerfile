@@ -24,5 +24,9 @@ COPY --from=composer:2.0 /usr/bin/composer /usr/bin/composer
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
 RUN apt-get install -y nodejs
 
+RUN apt-get install -y libfreetype6-dev libjpeg62-turbo-dev libpng-dev
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg && \
+    docker-php-ext-install -j$(nproc) gd
+
 # $ docker-compose exec コンテナ名 bash というコマンドを実行する時のコンテナ名
 WORKDIR /php
