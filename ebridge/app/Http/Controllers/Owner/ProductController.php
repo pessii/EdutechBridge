@@ -3,10 +3,36 @@
 namespace App\Http\Controllers\Owner;
 
 use App\Http\Controllers\Controller;
+use App\Models\Image;
+use App\Models\Product;
+use App\Models\SecondaryCategory;
+use App\Models\Owner;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:owners');
+        //オーナーかの確認
+        $this->middleware(function($request, $next){
+            //productのid取得 
+            $id = $request->route()->parameter('product');
+            if(!is_null($id)){
+                $productsOwnerId = Product::findOrFail($id)->shop->owner->id;
+                // キャスト 文字列→数値に型変換 
+                $productId = (int)$productsOwnerId;
+                // 同じでなかったら 
+                if($productId !== Auth::id()){ 
+                    abort(404);
+                }
+            } 
+            return $next($request); 
+            });
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +40,15 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        // ログインしているプロダクトを取得
+        $ownerInfo = Owner::with('shop.product.imageFirst')
+            ->where('id', Auth::id())
+            ->get();
+
+        return view('owner.products.index',
+            compact(
+                'ownerInfo'
+            ));
     }
 
     /**

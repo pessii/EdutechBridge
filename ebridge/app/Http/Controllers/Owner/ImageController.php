@@ -31,7 +31,6 @@ class ImageController extends Controller
             } 
             return $next($request); 
             });
-           
     }
 
     /**
