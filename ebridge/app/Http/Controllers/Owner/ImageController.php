@@ -4,13 +4,12 @@ namespace App\Http\Controllers\Owner;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UploadImageRequest;
-
 use App\Models\Image;
-
 use App\Services\ImageService;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ImageController extends Controller
 {
@@ -134,6 +133,18 @@ class ImageController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $image = Image::findOrFail($id);
+        $filePath = 'public/products/' . $image->filename;
+
+        Image::findOrFail($id)->delete();
+
+        // ファイルパスがあったら削除
+        if(Storage::exists($filePath)){
+            Storage::delete($filePath);
+        }
+
+        return redirect()
+            ->route('owner.images.index')
+            ->with('message', '画像が削除されました');
     }
 }
