@@ -876,6 +876,9 @@ select {
 .w-1\/2 {
   width: 50%;
 }
+.w-1\/4 {
+  width: 25%;
+}
 .w-12 {
   width: 3rem;
 }
@@ -908,9 +911,6 @@ select {
 }
 .w-full {
   width: 100%;
-}
-.w-1\/4 {
-  width: 25%;
 }
 .max-w-6xl {
   max-width: 72rem;
@@ -969,6 +969,9 @@ select {
 }
 .flex-col {
   flex-direction: column;
+}
+.flex-wrap {
+  flex-wrap: wrap;
 }
 .items-center {
   align-items: center;
@@ -1733,6 +1736,10 @@ select {
 
   .md\:border-t-0 {
     border-top-width: 0px;
+  }
+
+  .md\:p-4 {
+    padding: 1rem;
   }
 
   .md\:p-6 {

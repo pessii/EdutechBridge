@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Owner;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UploadImageRequest;
+
 use App\Models\Image;
+
+use App\Services\ImageService;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -55,29 +59,32 @@ class ImageController extends Controller
      */
     public function create()
     {
-        //
+        return view('owner.images.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\UploadImageRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UploadImageRequest $request)
     {
-        //
-    }
+        $imageFiles = $request->file('files');
+        if(!is_null($imageFiles)){
+            foreach($imageFiles as $imageFile){
+                // 画像アップロード
+                $fileNameToStore = ImageService::upload($imageFile, 'products');
+                Image::create([
+                    'owner_id' => Auth::id(),
+                    'filename' => $fileNameToStore
+                ]);
+            }
+        }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        return redirect()
+            ->route('owner.images.index')
+            ->with('message', '画像情報が登録されました');
     }
 
     /**
@@ -88,7 +95,12 @@ class ImageController extends Controller
      */
     public function edit($id)
     {
-        //
+        $image = Image::findOrFail($id);
+        
+        return view('owner.images.edit',
+            compact(
+                'image'
+            ));
     }
 
     /**
@@ -100,7 +112,18 @@ class ImageController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'title' => 'string|max:50',
+        ]);
+
+        // 保存処理
+        $image = Image::findOrFail($id);
+        $image->title = $request->title;
+        $image->save();
+
+        return redirect()
+            ->route('owner.images.index')
+            ->with('message', '画像情報が更新されました');
     }
 
     /**

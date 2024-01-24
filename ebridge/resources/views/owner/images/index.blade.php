@@ -18,16 +18,18 @@
                 <div class="p-6 bg-white border-b border-gray-200">
                     <x-flash-message status="info" />
 
-                    @foreach($images as $image)
-                    <div class="w-1/4 p-4">
-                        <a href="{{ route('owner.images.edit', ['image' => $image->id] ) }}">
-                            <div class="border rounded-md p-4">
-                                <div class="text-xl">{{ $image->name }}</div>
-                                <x-thumbnail :filename="$image->filename" type="products" />
-                            </div>
-                        </a>
+                    <div class="flex flex-wrap">
+                        @foreach($images as $image)
+                        <div class="w-1/4 p-2 md:p-4">
+                            <a href="{{ route('owner.images.edit', ['image' => $image->id] ) }}">
+                                <div class="border rounded-md p-2 md:p-4">
+                                    <x-thumbnail :filename="$image->filename" type="products" />
+                                    <div class="text-gray-700">{{ $image->title }}</div>
+                                </div>
+                            </a>
+                        </div>
+                        @endforeach
                     </div>
-                    @endforeach
                     
                     {{ $images->links() }}
                 </div>

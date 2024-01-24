@@ -99,7 +99,6 @@ class ShopController extends Controller
         {
             $shop->filename = $fileNameToStore;
         }
-
         $shop->save();
 
         return redirect()

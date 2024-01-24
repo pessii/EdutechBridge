@@ -17,18 +17,19 @@ class ImageService
      */
     public static function upload($imageFile, $folderName)
     {
-        // (リサイズなし) 
-        // ファイル名の一意のIDを自動的に生成して保存
-        // Storage::putFile('public/shops', $imageFile); 
-
+        if(is_array($imageFile)){
+            $file = $imageFile['image'];
+        } else {
+            $file = $imageFile; 
+        }
         // (リサイズあり)
         // ランダムなファイル名を作成
         $fileName = uniqid(rand().'_'); 
         // 拡張子を取得
-        $extension = $imageFile->extension(); 
+        $extension = $file->extension(); 
         $fileNameToStore = $fileName. '.' . $extension; 
         // リサイズ処理
-        $resizedImage = InterventionImage::make($imageFile)->resize(1920, 1080)->encode();
+        $resizedImage = InterventionImage::make($file)->resize(1920, 1080)->encode();
 
         Storage::put('public/' . $folderName . '/' . $fileNameToStore, $resizedImage);
 
