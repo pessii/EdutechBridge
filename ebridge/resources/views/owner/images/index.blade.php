@@ -3,7 +3,7 @@
     <div class="flex">
             <div>
                 <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                    オーナー 一覧
+                    画像管理
                 </h2>
             </div>
             <div class="ml-auto">

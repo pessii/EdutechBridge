@@ -1,8 +1,17 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
+    <div class="flex">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                画像編集
+            </h2>
+            <div class="ml-auto">
+                <form id="delete_{{ $image->id }}" method="post" action="{{ route('owner.images.destroy', ['image' => $image->id] ) }}">
+                    @csrf
+                    @method('delete')
+                        <a href="#" data-id="{{ $image->id }}" onclick="deletePost(this)" class="text-white bg-red-500 border-0 py-2 px-4 focus:outline-none hover:bg-red-600 rounded">削除</a>
+                </form>
+            </div>
+        </div>
     </x-slot>
 
     <div class="py-12">
@@ -10,14 +19,6 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
                     <x-auth-validation-errors class="mb-4" :errors="$errors" />
-                    
-                    <form id="delete_{{ $image->id }}" method="post" action="{{ route('owner.images.destroy', ['image' => $image->id] ) }}">
-                        @csrf
-                        @method('delete')
-                        <div class="p-2 w-full flex justify-end mt-4">
-                            <a href="#" data-id="{{ $image->id }}" onclick="deletePost(this)" class="text-white bg-red-500 border-0 py-2 px-4 focus:outline-none hover:bg-red-600 rounded">削除</a>
-                        </div>
-                    </form>
 
                     <form method="post" action="{{ route('owner.images.update', ['image' => $image->id]) }}">
                     @csrf
