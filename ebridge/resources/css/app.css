@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.swiper {
+  height: 300px;
+}
+
 /**************************\
   Basic Modal Styles
 \**************************/
