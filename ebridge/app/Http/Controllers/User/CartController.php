@@ -77,11 +77,15 @@ class CartController extends Controller
             } else {
                 // カート内の商品(数量)の方が少なければ購入実行
                 $lineItem = [ 
-                    'price_data.product_data.name' => $product->name, 
-                    'price_data.product_data.description' => $product->description, 
-                    'price_data.unit_amoun' => $product->price, 
-                    'price_data.currency' => 'jpy', 
-                    'quantity' => $product->pivot->quantity, 
+                    'price_data' => [
+                        'product_data' => [
+                            'name' => $product->name,
+                            'description' => $product->description,
+                        ],
+                        'unit_amount' => $product->price,
+                        'currency' => 'jpy',
+                    ],
+                    'quantity' => $product->pivot->quantity,
                 ]; 
                 array_push($lineItems, $lineItem); 
             }
@@ -95,8 +99,6 @@ class CartController extends Controller
                     'quantity' => $product->pivot->quantity * -1
                 ]);
             }
-
-            dd('test');
         }
         
         \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
