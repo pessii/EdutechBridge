@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\User;
+use App\Models\Stock;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -65,14 +66,37 @@ class CartController extends Controller
 
         $lineItems = []; 
         foreach($user->products as $product){ 
-            $lineItem = [ 
-                'price_data.product_data.name' => $product->name, 
-                'price_data.product_data.description' => $product->description, 
-                'price_data.unit_amoun' => $product->price, 
-                'price_data.currency' => 'jpy', 
-                'quantity' => $product->pivot->quantity, 
-            ]; 
-            array_push($lineItems, $lineItem); 
+            // 1つずつ確認していく
+            $quantity = "";
+            $quantity = Stock::where('product_id', $product->id)
+                ->sum('quantity');
+
+            // カートの商品とストックテーブルの商品を確認
+            if($product->pivot->quantity > $quantity){
+                return redirect()->route('user.cart.index');
+            } else {
+                // カート内の商品(数量)の方が少なければ購入実行
+                $lineItem = [ 
+                    'price_data.product_data.name' => $product->name, 
+                    'price_data.product_data.description' => $product->description, 
+                    'price_data.unit_amoun' => $product->price, 
+                    'price_data.currency' => 'jpy', 
+                    'quantity' => $product->pivot->quantity, 
+                ]; 
+                array_push($lineItems, $lineItem); 
+            }
+
+            foreach($products as $product){
+                Stock::create([
+                    //作成したオーナーのIDを取得
+                    'product_id' => $product->id,
+                    'type' => \Constant::PRODUCT_LIST['reduce'],
+                    // 1商品ずつ減らす
+                    'quantity' => $product->pivot->quantity * -1
+                ]);
+            }
+
+            dd('test');
         }
         
         \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
