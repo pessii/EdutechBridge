@@ -1,8 +1,17 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            商品編集
-        </h2>
+        <div class="flex">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                商品編集
+            </h2>
+            <div class="ml-auto">
+                <form id="delete_{{ $product->id }}" method="post" action="{{ route('owner.products.destroy', ['product' => $product->id] ) }}">
+                    @csrf
+                    @method('delete')
+                        <a href="#" data-id="{{ $product->id }}" onclick="deletePost(this)" class="text-white bg-red-500 border-0 py-2 px-4 focus:outline-none hover:bg-red-600 rounded">削除</a>
+                </form>
+            </div>
+        </div>
     </x-slot>
 
     <div class="py-12">
@@ -140,5 +149,12 @@
             MicroModal.close(modal); //モーダルを閉じる 
         }) 
     })
+
+    function deletePost(e) { 
+        'use strict'; 
+        if (confirm('本当に削除してもいいですか')) { 
+            document.getElementById('delete_' + e.dataset.id).submit(); 
+        } 
+    } 
 </script>
 </x-app-layout>
