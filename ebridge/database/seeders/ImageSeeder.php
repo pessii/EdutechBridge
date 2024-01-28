@@ -32,7 +32,7 @@ class ImageSeeder extends Seeder
             ],
             [
                 'owner_id' => 1,
-                'filename' => '1133765716_65b2300c93926.jpg',
+                'filename' => '1507850927_65b5c0b0c81bf.jpg',
                 'title' => null
             ],
             [
@@ -42,7 +42,7 @@ class ImageSeeder extends Seeder
             ],
             [
                 'owner_id' => 1,
-                'filename' => '1133765716_65b2300c93926.jpg',
+                'filename' => '1507850927_65b5c0b0c81bf.jpg',
                 'title' => null
             ]]);
     }
