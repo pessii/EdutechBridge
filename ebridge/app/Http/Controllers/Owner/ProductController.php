@@ -35,7 +35,7 @@ class ProductController extends Controller
                 }
             } 
             return $next($request); 
-            });
+        });
     }
 
     /**
