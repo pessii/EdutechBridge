@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Stock;
 use App\Models\PrimaryCategory;
+use App\Mail\TestMail;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class ItemController extends Controller
 {
@@ -32,6 +34,11 @@ class ItemController extends Controller
 
     public function index(Request $request)
     {
+        //受信者の指定 
+        Mail::to('test@example.com') 
+            //Mailableクラス
+            ->send(new TestMail()); 
+
         $categories = PrimaryCategory::with('secondary')
             ->get();
 
