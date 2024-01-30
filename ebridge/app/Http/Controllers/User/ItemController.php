@@ -38,6 +38,7 @@ class ItemController extends Controller
         $products = Product::availableItems()
             // カテゴリーを選んでない場合は初期値0を渡す
             ->selectCategory($request->category ?? '0')
+            ->searchKeyword($request->keyword)
             ->sortOrder($request->sort)
             ->paginate($request->pagination ?? '20');
 
