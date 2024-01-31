@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * 現状使わない
+ */
+
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;

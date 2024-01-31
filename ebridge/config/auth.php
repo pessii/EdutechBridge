@@ -48,10 +48,11 @@ return [
             'driver' => 'session',
             'provider' => 'owners',
         ],
-        'admin' => [
-            'driver' => 'session',
-            'provider' => 'admin',
-        ],
+        // 現状 admin は使わない
+        // 'admin' => [
+        //     'driver' => 'session',
+        //     'provider' => 'admin',
+        // ],
     ],
 
     /*
@@ -80,10 +81,11 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\Owner::class,
         ],
-        'admin' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\Admin::class,
-        ],
+        // 現状 admin は使わない
+        // 'admin' => [
+        //     'driver' => 'eloquent',
+        //     'model' => App\Models\Admin::class,
+        // ],
 
         // 'users' => [
         //     'driver' => 'database',
@@ -119,12 +121,13 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
-        'admin' => [
-            'provider' => 'admin',
-            'table' => 'admin_password_resets',
-            'expire' => 60,
-            'throttle' => 60,
-        ],
+        // 現状 admin は使わない
+        // 'admin' => [
+        //     'provider' => 'admin',
+        //     'table' => 'admin_password_resets',
+        //     'expire' => 60,
+        //     'throttle' => 60,
+        // ],
     ],
 
     /*

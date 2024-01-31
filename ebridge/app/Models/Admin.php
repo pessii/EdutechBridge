@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * 現状 admin は使わない
+ */
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;

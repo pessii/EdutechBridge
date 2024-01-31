@@ -19,7 +19,8 @@ class RouteServiceProvider extends ServiceProvider
      */
     public const HOME = '/';
     public const OWNER_HOME = '/owner/dashboard';
-    public const ADMIN_HOME = '/admin/dashboard';
+    // 現状 admin は使わない
+    // public const ADMIN_HOME = '/admin/dashboard';
 
     /**
      * The controller namespace for the application.
@@ -59,12 +60,12 @@ class RouteServiceProvider extends ServiceProvider
                 ->namespace($this->namespace)
                 ->group(base_path('routes/owner.php'));
 
-            // admin
-            Route::prefix('admin')
-                ->as('admin.')
-                ->middleware('web')
-                ->namespace($this->namespace)
-                ->group(base_path('routes/admin.php'));
+            // 現状 admin は使わない
+            // Route::prefix('admin')
+            //     ->as('admin.')
+            //     ->middleware('web')
+            //     ->namespace($this->namespace)
+            //     ->group(base_path('routes/admin.php'));
         });
     }
 

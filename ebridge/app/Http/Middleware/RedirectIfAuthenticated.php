@@ -11,7 +11,9 @@ class RedirectIfAuthenticated
 {
     private const GUARD_USER = 'users';
     private const GUARD_OWNER = 'owners';
-    private const GUARD_ADMIN = 'admin';
+    // 現状 admin は使わない
+    // private const GUARD_ADMIN = 'admin';
+
     /**
      * Handle an incoming request.
      *
@@ -38,9 +40,10 @@ class RedirectIfAuthenticated
             return redirect(RouteServiceProvider::OWNER_HOME);
         }
 
-        if(Auth::guard(self::GUARD_ADMIN)->check() && $request->routeIs('admin.*')){
-            return redirect(RouteServiceProvider::ADMIN_HOME);
-        }
+        // 現状 admin は使わない
+        // if(Auth::guard(self::GUARD_ADMIN)->check() && $request->routeIs('admin.*')){
+        //     return redirect(RouteServiceProvider::ADMIN_HOME);
+        // }
 
         return $next($request);
     }
