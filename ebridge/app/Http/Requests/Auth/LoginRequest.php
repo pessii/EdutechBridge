@@ -45,10 +45,9 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
+        // 現状 admin は使わない
         if($this->routeIs('owner.*')){
             $guard = 'owners';
-        }elseif($this->routeIs('admin.*')){
-            $guard = 'admin';
         }else{
             $guard = 'users';
         }
