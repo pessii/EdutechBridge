@@ -4,12 +4,15 @@ namespace App\Http\Controllers\Owner\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Owner;
+use App\Models\Shop;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class RegisteredUserController extends Controller
 {
@@ -34,21 +37,40 @@ class RegisteredUserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:owners'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:owners',
+            'password' => 'required|string|confirmed|min:8',
         ]);
 
-        $user = Owner::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        try
+        {
+            DB::transaction(function () use($request) {
+                $owner = Owner::create([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'password' => Hash::make($request->password),
+                ]);
 
-        event(new Registered($user));
+                event(new Registered($owner));
 
-        Auth::guard('owners')->login($user);
+                Auth::guard('owners')->login($owner);
 
-        return redirect(RouteServiceProvider::OWNER_HOME);
+                Shop::create([
+                    'owner_id' => $owner->id,//作成したオーナーのIDを取得
+                    'name' => '店名を入力',
+                    'information' => '',
+                    'filename' => '',
+                    'is_selling' => true
+                ]);
+            //トランザクション２回繰り返し
+            }, 2);
+    
+            return redirect(RouteServiceProvider::OWNER_HOME);
+        }
+        catch(\Throwable $e)
+        {
+            Log::error($e);
+            throw $e;
+        }
     }
 }
