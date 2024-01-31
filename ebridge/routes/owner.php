@@ -47,7 +47,7 @@ Route::resource('products', ProductController::class)
     ->middleware('auth:owners')
     ->except(['show']);
 
-Route::middleware('guest')->group(function () {
+Route::middleware(['guest', 'basicauth'])->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
                 ->name('register');
 
