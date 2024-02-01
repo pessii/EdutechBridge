@@ -46,7 +46,7 @@ class ProductController extends Controller
     public function index()
     {
         // ログインしているプロダクトを取得
-        $ownerInfo = Owner::with('shop.product.imageFirst')
+        $ownerInfo = Owner::with('shop.product.stock')
             ->where('id', Auth::id())
             ->get();
 
