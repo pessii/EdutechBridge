@@ -3,7 +3,7 @@
     <div class="flex">
             <div>
                 <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                    画像管理
+                    商品管理
                 </h2>
             </div>
             <div class="ml-auto">
@@ -26,7 +26,17 @@
                                         <a href="{{ route('owner.products.edit', ['product' => $product->id] ) }}">
                                             <div class="border rounded-md p-2 md:p-4">
                                                 <x-thumbnail filename="{{ $product->imageFirst->filename ?? '' }}" type="products" />
-                                                <div class="text-gray-700">{{ $product->name }}</div>
+                                                <div class="font-bold">{{ $product->name }}</div>
+                                                @php
+                                                    $totalQuantity = 0;
+                                                @endphp
+                                                @foreach($product->stock as $stock)
+                                                    @php
+                                                        $totalQuantity += $stock->quantity;
+                                                    @endphp
+                                                @endforeach
+                                                <div class="text-gray-500">在庫数<span class="text-black ml-2">{{ $totalQuantity }}</span></div>
+                                                <div class="text-lg font-bold">￥{{ number_format($product->price) }}</div>
                                             </div>
                                         </a>
                                     </div>

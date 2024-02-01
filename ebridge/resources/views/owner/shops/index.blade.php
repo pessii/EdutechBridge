@@ -12,7 +12,7 @@
                     <x-flash-message status="info" />
 
                     @foreach($shops as $shop)
-                    <div class="w-1/2 p-4">
+                    <div class="p-2 w-1/2 mx-auto">
                         <a href="{{ route('owner.shops.edit', ['shop' => $shop->id] ) }}">
                             <div class="border rounded-md p-4">
                                 <div class="mb-4">
